@@ -183,10 +183,25 @@ const EMPTY_PROFILE: Profile = {
   equipment: [],
 };
 
+function normalizeProfile(data: unknown): Profile {
+  const d = (data && typeof data === "object" ? data : {}) as Partial<Profile>;
+  return {
+    ...EMPTY_PROFILE,
+    ...d,
+    goals: Array.isArray(d.goals) ? d.goals : EMPTY_PROFILE.goals,
+    equipment: Array.isArray(d.equipment) ? d.equipment : EMPTY_PROFILE.equipment,
+    fitnessLevel: FITNESS_LEVELS.includes(d.fitnessLevel as string)
+      ? (d.fitnessLevel as FitnessLevel)
+      : EMPTY_PROFILE.fitnessLevel,
+  };
+}
+
 function loadProfile(): Profile | null {
   try {
     const raw = localStorage.getItem(PROFILE_KEY);
-    return raw ? (JSON.parse(raw) as Profile) : null;
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    return normalizeProfile(parsed);
   } catch {
     return null;
   }
