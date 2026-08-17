@@ -124,7 +124,7 @@ function TodayFood({
             Gentle tips
           </p>
           <ul className="food-tips-list">
-            {guidance.tips.map((tip, i) => (
+            {guidance.tips.map((tip: string, i: number) => (
               <li key={i}>{tip}</li>
             ))}
           </ul>
@@ -203,11 +203,11 @@ function MessMenuEditor({
 
   const updateGeneral = (meal: MealType, value: string) => {
     const key = `general${meal.charAt(0).toUpperCase()}${meal.slice(1)}` as keyof MessMenu;
-    setEditMenu((m) => ({ ...m, [key]: value }));
+    setEditMenu((m: any) => ({ ...m, [key]: value }));
   };
 
   const updateDay = (day: string, meal: MealType, value: string) => {
-    setEditMenu((m) => ({
+    setEditMenu((m: any) => ({
       ...m,
       days: {
         ...m.days,
@@ -314,7 +314,7 @@ function MessMenuEditor({
           <p className="menu-hint">
             Set specific meals for each day. Paste a full menu above to fill this quickly.
           </p>
-          {DAY_NAMES.map((day) => {
+          {DAY_NAMES.map((day: string) => {
             const dayMenu = editMenu.days[day] || { breakfast: "", lunch: "", snacks: "", dinner: "" };
             return (
               <div className="menu-day-block" key={day}>
@@ -380,9 +380,9 @@ function FoodLog({
     extra: [],
     drinks: [],
   };
-  log.entries.forEach((e) => {
-    if (entriesByMeal[e.mealType]) {
-      entriesByMeal[e.mealType].push(e);
+  log.entries.forEach((e: any) => {
+    if (entriesByMeal[e.mealType as LogMealType]) {
+      entriesByMeal[e.mealType as LogMealType].push(e);
     }
   });
 
@@ -409,16 +409,19 @@ function FoodLog({
           <div className="form-field">
             <label className="form-label">Meal</label>
             <div className="chip-group">
-              {MEAL_ORDER.map((mt) => (
+              {MEAL_ORDER.map((mt: string) => {
+                const mealType_ = mt as LogMealType;
+                return (
                 <button
                   key={mt}
                   className={`chip ${mealType === mt ? "chip-active" : ""}`}
-                  onClick={() => setMealType(mt)}
+                  onClick={() => setMealType(mealType_)}
                   type="button"
                 >
-                  {MEAL_LABELS[mt]}
+                  {MEAL_LABELS[mealType_]}
                 </button>
-              ))}
+                );
+              })}
             </div>
           </div>
 
@@ -443,16 +446,19 @@ function FoodLog({
           <div className="form-field">
             <label className="form-label">Portion size</label>
             <div className="chip-group">
-              {PORTION_OPTIONS.map((p) => (
+              {PORTION_OPTIONS.map((p: string) => {
+                const portion_ = p as Portion;
+                return (
                 <button
                   key={p}
                   className={`chip ${portion === p ? "chip-active" : ""}`}
-                  onClick={() => setPortion(p)}
+                  onClick={() => setPortion(portion_)}
                   type="button"
                 >
                   {p}
                 </button>
-              ))}
+                );
+              })}
             </div>
             <p className="form-hint">{PORTION_DESCRIPTIONS[portion]}</p>
           </div>
@@ -476,11 +482,12 @@ function FoodLog({
         </div>
       ) : (
         <div className="food-log-list">
-          {MEAL_ORDER.map((mt) => {
-            const entries = entriesByMeal[mt];
+          {MEAL_ORDER.map((mt: string) => {
+            const mealType_ = mt as LogMealType;
+            const entries = entriesByMeal[mealType_];
             if (entries.length === 0) return null;
-            const Icon = MEAL_ICONS[mt];
-            const colors = MEAL_COLORS[mt];
+            const Icon = MEAL_ICONS[mealType_];
+            const colors = MEAL_COLORS[mealType_];
             return (
               <div className="food-log-group" key={mt}>
                 <div className="food-log-group-header">
@@ -490,9 +497,9 @@ function FoodLog({
                   >
                     <Icon size={16} />
                   </span>
-                  <span className="food-log-group-label">{MEAL_LABELS[mt]}</span>
+                  <span className="food-log-group-label">{MEAL_LABELS[mealType_]}</span>
                 </div>
-                {entries.map((entry) => (
+                {entries.map((entry: any) => (
                   <div className="food-log-entry" key={entry.id}>
                     <div className="food-log-entry-info">
                       <span className="food-log-entry-name">{entry.foodItem}</span>

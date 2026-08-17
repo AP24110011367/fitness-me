@@ -151,13 +151,13 @@ export default function ProgressPage({ profile, onSaveProfile, onBack }: Props) 
   const workoutDates = Array.from(new Set<string>(workoutHistory.map((e) => e.date.split("T")[0])));
   const workoutConsistency = consistencyFromDates(workoutDates, 7);
 
-  const walkingDates = stepHistory.filter((d) => d.target > 0 && d.steps >= d.target).map((d) => d.date);
+  const walkingDates = stepHistory.filter((d: any) => d.target > 0 && d.steps >= d.target).map((d: any) => d.date);
   const walkingConsistency = consistencyFromDates(walkingDates, 7);
 
-  const waterDates = waterHistory.filter((d) => d.ml >= d.targetMl).map((d) => d.date);
+  const waterDates = waterHistory.filter((d: any) => d.ml >= d.targetMl).map((d: any) => d.date);
   const waterConsistency = consistencyFromDates(waterDates, 7);
 
-  const sleepDates = sleepHistory.filter((d) => d.hours >= d.targetHours - 0.5).map((d) => d.date);
+  const sleepDates = sleepHistory.filter((d: any) => d.hours >= d.targetHours - 0.5).map((d: any) => d.date);
   const sleepConsistency = consistencyFromDates(sleepDates, 7);
 
   const totalWorkouts = workoutHistory.length;

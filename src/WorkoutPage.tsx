@@ -80,9 +80,9 @@ function ReadyScreen({
   onShowHistory: () => void;
   historyCount: number;
 }) {
-  const warmup = workout.exercises.filter((e) => e.section === "warmup");
-  const main = workout.exercises.filter((e) => e.section === "main");
-  const cooldown = workout.exercises.filter((e) => e.section === "cooldown");
+  const warmup = workout.exercises.filter((e: any) => e.section === "warmup");
+  const main = workout.exercises.filter((e: any) => e.section === "main");
+  const cooldown = workout.exercises.filter((e: any) => e.section === "cooldown");
 
   return (
     <div className="workout-ready">
@@ -111,21 +111,21 @@ function ReadyScreen({
 
       <div className="workout-section-block">
         <p className="workout-section-title">Warm-up</p>
-        {warmup.map((ex) => (
+        {warmup.map((ex: any) => (
           <ExercisePreviewRow key={ex.id} ex={ex} />
         ))}
       </div>
 
       <div className="workout-section-block">
         <p className="workout-section-title">Main workout</p>
-        {main.map((ex) => (
+        {main.map((ex: any) => (
           <ExercisePreviewRow key={ex.id} ex={ex} />
         ))}
       </div>
 
       <div className="workout-section-block">
         <p className="workout-section-title">Cool-down</p>
-        {cooldown.map((ex) => (
+        {cooldown.map((ex: any) => (
           <ExercisePreviewRow key={ex.id} ex={ex} />
         ))}
       </div>
@@ -183,7 +183,7 @@ function ActiveWorkout({
   onCancel: () => void;
 }) {
   const [exerciseStates, setExerciseStates] = useState(
-    workout.exercises.map((ex) => ({
+    workout.exercises.map((ex: any) => ({
       completedSets: Array(ex.sets).fill(false),
       expanded: false,
     })),
@@ -199,8 +199,8 @@ function ActiveWorkout({
   }, []);
 
   const toggleSet = (exIdx: number, setIdx: number) => {
-    setExerciseStates((prev) =>
-      prev.map((state, i) => {
+    setExerciseStates((prev: any) =>
+      prev.map((state: any, i: number) => {
         if (i !== exIdx) return state;
         const newCompleted = [...state.completedSets];
         newCompleted[setIdx] = !newCompleted[setIdx];
@@ -210,24 +210,24 @@ function ActiveWorkout({
   };
 
   const toggleExpand = (exIdx: number) => {
-    setExerciseStates((prev) =>
-      prev.map((state, i) =>
+    setExerciseStates((prev: any) =>
+      prev.map((state: any, i: number) =>
         i === exIdx ? { ...state, expanded: !state.expanded } : state,
       ),
     );
   };
 
-  const allComplete = exerciseStates.every((s) =>
+  const allComplete = exerciseStates.every((s: any) =>
     s.completedSets.every(Boolean),
   );
 
   const totalCompleted = exerciseStates.reduce(
-    (sum, s) => sum + s.completedSets.filter(Boolean).length,
+    (sum: number, s: any) => sum + s.completedSets.filter(Boolean).length,
     0,
   );
 
   const handleFinish = () => {
-    const completedSetsArr = exerciseStates.map((s) =>
+    const completedSetsArr = exerciseStates.map((s: any) =>
       s.completedSets.filter(Boolean).length,
     );
     onComplete(workout.exercises, completedSetsArr, elapsed);
@@ -252,12 +252,12 @@ function ActiveWorkout({
         <div
           className="workout-active-progress-fill"
           style={{
-            width: `${Math.round((totalCompleted / exerciseStates.reduce((s, st) => s + st.completedSets.length, 0)) * 100)}%`,
+            width: `${Math.round((totalCompleted / exerciseStates.reduce((s: number, st: any) => s + st.completedSets.length, 0)) * 100)}%`,
           }}
         />
       </div>
 
-      {workout.exercises.map((ex, exIdx) => {
+      {workout.exercises.map((ex: any, exIdx: number) => {
         const state = exerciseStates[exIdx];
         const exCompleted = state.completedSets.filter(Boolean).length;
         const exAllDone = exCompleted === ex.sets;
@@ -303,7 +303,7 @@ function ActiveWorkout({
                   <p className="exercise-detail-text">{ex.formTips}</p>
                 </div>
                 <div className="exercise-sets-list">
-                  {state.completedSets.map((done, setIdx) => (
+                  {state.completedSets.map((done: boolean, setIdx: number) => (
                     <button
                       key={setIdx}
                       className={`set-btn ${done ? "set-done" : ""}`}
@@ -338,7 +338,7 @@ function ActiveWorkout({
           ? "Complete at least one set to finish"
           : allComplete
             ? "All sets complete!"
-            : `${totalCompleted} of ${exerciseStates.reduce((s, st) => s + st.completedSets.length, 0)} sets done — you can finish early`}
+            : `${totalCompleted} of ${exerciseStates.reduce((s: number, st: any) => s + st.completedSets.length, 0)} sets done — you can finish early`}
       </p>
     </div>
   );

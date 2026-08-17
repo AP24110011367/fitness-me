@@ -809,7 +809,7 @@ function Home({ onNavigate, profile }: { onNavigate: (page: CategoryKey) => void
 
   const todayStr = new Date().toISOString().split("T")[0];
   const workoutHistoryData = loadWorkoutHistory();
-  const workoutDoneToday = workoutHistoryData.some((w) => w.date.split("T")[0] === todayStr) ? 1 : 0;
+  const workoutDoneToday = workoutHistoryData.some((w: { date: string }) => w.date.split("T")[0] === todayStr) ? 1 : 0;
   const lastWorkoutTip = workoutHistoryData.length > 0 ? workoutHistoryData[0].nextSuggestion : null;
 
   return (
